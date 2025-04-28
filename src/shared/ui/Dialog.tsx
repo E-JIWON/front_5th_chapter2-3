@@ -1,4 +1,4 @@
-import { forwardRef } from "react"
+import { forwardRef, HTMLAttributes } from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
@@ -8,7 +8,11 @@ export const DialogTrigger = DialogPrimitive.Trigger
 export const DialogPortal = DialogPrimitive.Portal
 export const DialogOverlay = DialogPrimitive.Overlay
 
-const DialogContent = forwardRef(({ className, children, ...props }, ref) => (
+// 타입 정의 추가
+interface DialogContentProps extends DialogPrimitive.DialogContentProps {
+  className?: string
+}
+const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
     <DialogPrimitive.Content
@@ -26,12 +30,18 @@ const DialogContent = forwardRef(({ className, children, ...props }, ref) => (
 ))
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
-const DialogHeader = ({ className, ...props }) => (
+interface DialogHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  className?: string
+}
+const DialogHeader = ({ className, ...props }: DialogHeaderProps) => (
   <div className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`} {...props} />
 )
 DialogHeader.displayName = "DialogHeader"
 
-const DialogTitle = forwardRef(({ className, ...props }, ref) => (
+interface DialogTitleProps extends DialogPrimitive.DialogTitleProps {
+  className?: string
+}
+const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     className={`text-lg font-semibold leading-none tracking-tight ${className}`}
