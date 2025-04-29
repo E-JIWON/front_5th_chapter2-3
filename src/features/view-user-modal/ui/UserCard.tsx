@@ -3,6 +3,7 @@ import { useUserModalStore } from "../model/useModalStore"
 
 const UserCard = () => {
   const { showUserModal, selectedUser, setShowUserModal } = useUserModalStore()
+
   return (
     <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
       <DialogContent>
