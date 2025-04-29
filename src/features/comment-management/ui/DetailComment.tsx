@@ -3,8 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Di
 import { CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
-import useLikeComment from "../api/useLikeComment"
-import useDeleteComment from "../api/useDeleteComment"
+import useLikeComment from "../model/useLikeComment"
+import useDeleteComment from "../model/useDeleteComment"
 
 interface DetailCommentProps {
   showPostDetailDialog: boolean //   게시물 상세 보기 오픈 여부

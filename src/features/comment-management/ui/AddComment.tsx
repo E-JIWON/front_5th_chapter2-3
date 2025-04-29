@@ -2,7 +2,7 @@ import { CommentAddResponse, CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Dialog"
 import { Textarea } from "@/shared/ui/Textarea"
-import { useAddComment } from "../api/useAddComment"
+import { useAddComment } from "../model/useAddComment"
 
 interface AddCommentProps {
   showAddCommentDialog: boolean

@@ -2,7 +2,7 @@ import { CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Dialog"
 import { Textarea } from "@/shared/ui/Textarea"
-import useUpdateComment from "../api/useUpdateComment"
+import useUpdateComment from "../model/useUpdateComment"
 
 //
 interface EditCommentProps {
