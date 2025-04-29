@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
 import {
   Card,
   CardContent,
@@ -11,12 +10,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from "../shared/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/Dialog"
 import UserCard from "@/features/view-user-modal/ui/UserCard"
@@ -32,6 +25,12 @@ import EditComment from "@/features/comment-management/ui/EditComment"
 import usePostsModel from "@/features/posts/model/usePostsModel"
 import { useGetComment } from "@/features/comment-management/model/useGetComment"
 import useTagsModel from "@/features/tag/model/useTagsModel"
+import Table from "@/shared/ui/Table/Table"
+import TableHeader from "@/shared/ui/Table/TableHeader"
+import TableRow from "@/shared/ui/Table/TableRow"
+import TableHead from "@/shared/ui/Table/TableHead"
+import TableBody from "@/shared/ui/Table/TableBody"
+import TableCell from "@/shared/ui/Table/TableCell"
 
 const PostsManager = () => {
   // 상태 관리
@@ -64,7 +63,7 @@ const PostsManager = () => {
     posts,
     searchQuery,
     selectedTag,
-    setPosts,
+    // setPosts,
     setSearchQuery,
     setSelectedTag,
     setSortBy,
@@ -74,6 +73,7 @@ const PostsManager = () => {
     total,
     searchPosts,
     updateURL,
+    fetchPostsByTag,
   } = usePostsModel()
 
   // 태그
@@ -82,13 +82,13 @@ const PostsManager = () => {
   // 게시물 추가
   const addPost = async () => {
     try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
+      // const response = await fetch("/api/posts/add", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(newPost),
+      // })
+      // const data = await response.json()
+      // setPosts([data, ...posts])
       setShowAddDialog(false)
       setNewPost({ title: "", body: "", userId: 1 })
     } catch (error) {
@@ -99,13 +99,13 @@ const PostsManager = () => {
   // 게시물 업데이트
   const updatePost = async () => {
     try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
+      // const response = await fetch(`/api/posts/${selectedPost.id}`, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(selectedPost),
+      // })
+      // const data = await response.json()
+      // setPosts(posts.map((post) => (post.id === data.id ? data : post)))
       setShowEditDialog(false)
     } catch (error) {
       console.error("게시물 업데이트 오류:", error)
@@ -118,7 +118,7 @@ const PostsManager = () => {
       await fetch(`/api/posts/${id}`, {
         method: "DELETE",
       })
-      setPosts(posts.filter((post) => post.id !== id))
+      // setPosts(posts.filter((post) => post.id !== id))
     } catch (error) {
       console.error("게시물 삭제 오류:", error)
     }

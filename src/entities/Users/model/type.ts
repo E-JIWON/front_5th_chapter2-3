@@ -1,44 +1,4 @@
-interface Hair {
-  color: string
-  type: string
-}
-
-interface Coordinates {
-  lat: number
-  lng: number
-}
-
-interface Address {
-  address: string
-  city: string
-  state: string
-  stateCode: string
-  postalCode: string
-  coordinates: Coordinates
-  country: string
-}
-
-interface Bank {
-  cardExpire: string
-  cardNumber: string
-  cardType: string
-  currency: string
-  iban: string
-}
-
-interface Company {
-  department: string
-  name: string
-  title: string
-  address: Address
-}
-
-interface Crypto {
-  coin: string
-  wallet: string
-  network: string
-}
-
+// 유저
 export interface User {
   id: number
   firstName: string
@@ -56,16 +16,69 @@ export interface User {
   height: number
   weight: number
   eyeColor: string
-  hair: Hair
+  hair: {
+    color: string
+    type: string
+  }
   ip: string
-  address: Address
+  address: {
+    address: string
+    city: string
+    state: string
+    stateCode: string
+    postalCode: string
+    coordinates: {
+      lat: number
+      lng: number
+    }
+    country: string
+  }
   macAddress: string
   university: string
-  bank: Bank
-  company: Company
+  bank: {
+    cardExpire: string
+    cardNumber: string
+    cardType: string
+    currency: string
+    iban: string
+  }
+  company: {
+    department: string
+    name: string
+    title: string
+    address: {
+      address: string
+      city: string
+      state: string
+      stateCode: string
+      postalCode: string
+      coordinates: {
+        lat: number
+        lng: number
+      }
+      country: string
+    }
+  }
   ein: string
   ssn: string
   userAgent: string
-  crypto: Crypto
+  crypto: {
+    coin: string
+    wallet: string
+    network: string
+  }
   role: string
+}
+
+// 포스트 필터 유저?작성자? 이거 어케분리하지
+export interface UserFilterResponse {
+  users: Author[]
+  total: number
+  skip: number
+  limit: number
+}
+export interface Author {
+  id: number
+  username: string
+  image: string
 }
