@@ -20,7 +20,7 @@ import { Textarea } from "@/shared/ui/Textarea"
 import { Button } from "@/shared/ui/Button"
 import { CommentItem } from "@/entities/Comments/model/type"
 import DetailComment from "@/features/comment-management/ui/DetailComment"
-import AddComment from "@/features/comment-management/ui/AddComment"
+import AddComment from "@/features/comment-add/model/ui/AddComment"
 import EditComment from "@/features/comment-management/ui/EditComment"
 import usePostsModel from "@/features/posts/model/usePostsModel"
 import { useGetComment } from "@/features/comment-management/model/useGetComment"
@@ -31,10 +31,9 @@ import TableRow from "@/shared/ui/Table/TableRow"
 import TableHead from "@/shared/ui/Table/TableHead"
 import TableBody from "@/shared/ui/Table/TableBody"
 import TableCell from "@/shared/ui/Table/TableCell"
+import { useSelectedPostStore } from "@/features/posts/model/useSelectedPostStore"
 
 const PostsManager = () => {
-  // 상태 관리
-  const [selectedPost, setSelectedPost] = useState(null)
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showEditDialog, setShowEditDialog] = useState(false)
   const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
@@ -46,83 +45,44 @@ const PostsManager = () => {
   const [comments, setComments] = useState<CommentItem[]>([])
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
-  // 댓글 추가 관련
-  const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
-
   // 댓글 수정 관련
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null)
 
+  const { selectedPost, setSelectedPost } = useSelectedPostStore() // 선택한 포스트
+
   const {
+    posts,
+    total,
     loading,
+
+    // 정렬 및 필터 상태
     limit,
     setLimit,
-    setSkip,
-    skip,
-    posts,
     searchQuery,
-    selectedTag,
-    // setPosts,
     setSearchQuery,
-    setSelectedTag,
-    setSortBy,
-    setSortOrder,
     sortBy,
+    setSortBy,
     sortOrder,
-    total,
+    setSortOrder,
+    selectedTag,
+    setSelectedTag,
+
+    // 페이지네이션
+    skip,
+    setSkip,
+
+    // CRUD 함수들
     searchPosts,
-    updateURL,
     fetchPostsByTag,
+    addPost,
+    updatePost,
+    deletePost,
+    updateURL,
   } = usePostsModel()
 
   // 태그
   const { tags } = useTagsModel()
-
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      // const response = await fetch("/api/posts/add", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(newPost),
-      // })
-      // const data = await response.json()
-      // setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
-  }
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      // const response = await fetch(`/api/posts/${selectedPost.id}`, {
-      //   method: "PUT",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(selectedPost),
-      // })
-      // const data = await response.json()
-      // setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
-  }
-
-  // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      // setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
-    }
-  }
 
   // 게시물 상세 보기 - 댓글 보기
   const openPostDetail = (post) => {
@@ -134,15 +94,35 @@ const PostsManager = () => {
   // TODO: ...아무튼 해결해야할 문제
   const { fetchComments } = useGetComment((loadedComments: CommentItem[]) => setComments(loadedComments))
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
+  // 게시물 추가 핸들러
+  const handleAddPost = async () => {
+    try {
+      await addPost(newPost)
+      setShowAddDialog(false)
+      setNewPost({ title: "", body: "", userId: 1 })
+    } catch (error) {
+      console.error("게시물 추가 오류:", error)
+    }
+  }
+
+  // 게시물 업데이트 핸들러
+  const handleUpdatePost = async () => {
+    try {
+      await updatePost(selectedPost)
+      setShowEditDialog(false)
+    } catch (error) {
+      console.error("게시물 업데이트 오류:", error)
+    }
+  }
+
+  // 게시물 삭제 핸들러
+  const handleDeletePost = async (id) => {
+    try {
+      await deletePost(id)
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error)
+    }
+  }
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (
@@ -213,7 +193,7 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
@@ -348,7 +328,7 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            <Button onClick={() => handleAddPost()}>게시물 추가</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -371,7 +351,7 @@ const PostsManager = () => {
               value={selectedPost?.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={() => handleUpdatePost()}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -384,27 +364,15 @@ const PostsManager = () => {
       <DetailComment
         showPostDetailDialog={showPostDetailDialog}
         setShowPostDetailDialog={setShowPostDetailDialog}
-        selectedPost={selectedPost}
         searchQuery={searchQuery}
         comments={comments}
-        setShowAddCommentDialog={setShowAddCommentDialog}
-        setNewComment={setNewComment}
         setComments={setComments}
         setSelectedComment={setSelectedComment}
         setShowEditCommentDialog={setShowEditCommentDialog}
       />
 
-      {/* 
-        댓글 추가 -> 댓글 상세에 추가버튼 있음 
-        TODO: 드릴링 해결 
-      */}
-      <AddComment
-        showAddCommentDialog={showAddCommentDialog}
-        setShowAddCommentDialog={setShowAddCommentDialog}
-        newComment={newComment}
-        setNewComment={setNewComment}
-        setComments={setComments}
-      />
+      {/* 댓글 추가 */}
+      <AddComment setComments={setComments} />
 
       {/* 댓글 수정 대화상자 */}
       <EditComment

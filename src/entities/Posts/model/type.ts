@@ -23,6 +23,6 @@ export interface PostDTO {
 }
 
 // 이건 어디다 두지
-export interface PostList extends PostDTO {
+export interface PostListItem extends PostDTO {
   author: Author
 }

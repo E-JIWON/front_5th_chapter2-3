@@ -5,23 +5,14 @@ import { Button } from "@/shared/ui/Button"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import useLikeComment from "../model/useLikeComment"
 import useDeleteComment from "../model/useDeleteComment"
+import { useSelectedPostStore } from "@/features/posts/model/useSelectedPostStore"
+import { useCommentAddStore } from "@/features/comment-add/model/useCommentAddStore"
 
 interface DetailCommentProps {
   showPostDetailDialog: boolean //   게시물 상세 보기 오픈 여부
   setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>> // 게시물 상세 보기 오픈 set
-  selectedPost: any // 자세히 보기 선택한 포스트 - TODO: 애니 해결하기
   searchQuery: string // TODO: 드릴
   comments: CommentItem[] // 선택한 포스트의 댓글들 TODO: 이거 드릴링
-
-  // 추가
-  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>> // 댓글 추가 오픈 set TODO..
-  setNewComment: React.Dispatch<
-    React.SetStateAction<{
-      body: string
-      postId: number
-      userId: number
-    }>
-  > // TODO.. 새 댓글 상태?
 
   // 좋아요
   setComments: React.Dispatch<React.SetStateAction<CommentItem[]>> //;;
@@ -35,15 +26,20 @@ const DetailComment = (props: DetailCommentProps) => {
   const {
     setShowPostDetailDialog,
     showPostDetailDialog,
-    selectedPost,
     searchQuery,
     comments,
-    setShowAddCommentDialog,
-    setNewComment,
     setComments,
     setSelectedComment,
     setShowEditCommentDialog,
   } = props
+
+  const { selectedPost } = useSelectedPostStore() // 선택한 포스트
+  const { openAddCommentDialog } = useCommentAddStore()
+
+  // 댓글 추가 클릭
+  const handleAddCommentClick = () => {
+    openAddCommentDialog(selectedPost?.id)
+  }
 
   // 댓글 좋아요
   const { likeComment } = useLikeComment((updatedComment) => {
@@ -79,13 +75,7 @@ const DetailComment = (props: DetailCommentProps) => {
               <h3 className="text-sm font-semibold">댓글</h3>
 
               {/* 댓글 추가 버튼 */}
-              <Button
-                size="sm"
-                onClick={() => {
-                  setNewComment((prev) => ({ ...prev, postId: selectedPost?.id }))
-                  setShowAddCommentDialog(true)
-                }}
-              >
+              <Button size="sm" onClick={handleAddCommentClick}>
                 <Plus className="w-3 h-3 mr-1" />
                 댓글 추가
               </Button>

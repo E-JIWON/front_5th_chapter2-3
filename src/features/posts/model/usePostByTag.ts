@@ -1,4 +1,4 @@
-import { PostList, PostsResponse } from "@/entities/Posts/model/type"
+import { PostListItem, PostsResponse } from "@/entities/Posts/model/type"
 import { UserFilterResponse } from "@/entities/Users/model/type"
 import { useQuery } from "@tanstack/react-query"
 
@@ -19,7 +19,7 @@ const usePostsByTag = (tag: string, enabled: boolean = true) => {
         const postsData: PostsResponse = await postsResponse.json()
         const usersData: UserFilterResponse = await usersResponse.json()
 
-        const postsWithUsers: PostList[] = postsData.posts.map((post) => ({
+        const postsWithUsers: PostListItem[] = postsData.posts.map((post) => ({
           ...post,
           author: usersData.users.find((user) => user.id === post.userId),
         }))
