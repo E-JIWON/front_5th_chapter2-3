@@ -29,6 +29,7 @@ import { CommentAddResponse, CommentItem } from "@/entities/Comments/model/type"
 import DetailComment from "@/features/comment-management/ui/DetailComment"
 import AddComment from "@/features/comment-management/ui/AddComment"
 import { useGetComment } from "@/features/comment-management/api/useGetComment"
+import EditComment from "@/features/comment-management/ui/EditComment"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -51,10 +52,6 @@ const PostsManager = () => {
   const [tags, setTags] = useState([])
   const [selectedTag, setSelectedTag] = useState(queryParams.get("tag") || "")
 
-  // const [selectedComment, setSelectedComment] = useState(null)
-
-  // const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-
   // 사용자 모달 관련
   const { openUserModal } = useUserModalStore()
 
@@ -62,9 +59,19 @@ const PostsManager = () => {
   const [comments, setComments] = useState<CommentItem[]>([])
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
 
-  // 댓글 추가 상태 관러
+  // 댓글 추가 관련
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
+
+  // 댓글 수정 관련
+  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
+  const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null)
+
+  ///
+  //
+  ///
+  //
+  //
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -108,6 +115,8 @@ const PostsManager = () => {
         setLoading(false)
       })
   }
+
+  // useEffect(() => {}, [])
 
   // 태그 가져오기
   const fetchTags = async () => {
@@ -211,29 +220,15 @@ const PostsManager = () => {
     }
   }
 
-  // 게시물 상세 보기
+  // 게시물 상세 보기 - 댓글 보기
   const openPostDetail = (post) => {
-    setSelectedPost(post)
-    // TODO: 할일 - 댓글 가져오기
-    // fetchComments(post.id)
-
-    // TODO: 할일 - 댓글 추가하기
-    setShowPostDetailDialog(true)
-    fetchComments(post.id)
+    setSelectedPost(post) // 선택한 게시글
+    setShowPostDetailDialog(true) // 상세 팝업
+    fetchComments(post.id) // 댓글 패치
   }
 
-  // 댓글 로드 콜백
-  const handleCommentsLoaded = (loadedComments: CommentItem[]) => {
-    setComments(loadedComments)
-  }
-
-  const { fetchComments } = useGetComment(handleCommentsLoaded)
-
-  // 댓글 추가 콜백 (PostsManager 내부)
-  const handleCommentAdded = (addedComment: CommentAddResponse) => {
-    // 기존 댓글 목록에 새 댓글 추가
-    setComments((prev) => [...prev, addedComment as unknown as CommentItem])
-  }
+  // TODO: ...아무튼 해결해야할 문제
+  const { fetchComments } = useGetComment((loadedComments: CommentItem[]) => setComments(loadedComments))
 
   useEffect(() => {
     fetchTags()
@@ -490,25 +485,11 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 댓글 수정 대화상자 */}
-      {/* <EditComment /> */}
-      {/* <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>댓글 수정</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Textarea
-              placeholder="댓글 내용"
-              value={selectedComment?.body || ""}
-              onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
-            />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
-          </div>
-        </DialogContent>
-      </Dialog> */}
-
-      {/* 게시물 상세 보기 대화상자 */}
+      {/* 
+        게시물 상세 보기 대화상자 
+        좋아요, 수정, 삭제 기능이 안에 있음..
+        TODO: 드릴링 해결 
+      */}
       <DetailComment
         showPostDetailDialog={showPostDetailDialog}
         setShowPostDetailDialog={setShowPostDetailDialog}
@@ -517,15 +498,30 @@ const PostsManager = () => {
         comments={comments}
         setShowAddCommentDialog={setShowAddCommentDialog}
         setNewComment={setNewComment}
+        setComments={setComments}
+        setSelectedComment={setSelectedComment}
+        setShowEditCommentDialog={setShowEditCommentDialog}
       />
 
-      {/* 댓글 추가 대화상자 */}
+      {/* 
+        댓글 추가 -> 댓글 상세에 추가버튼 있음 
+        TODO: 드릴링 해결 
+      */}
       <AddComment
         showAddCommentDialog={showAddCommentDialog}
         setShowAddCommentDialog={setShowAddCommentDialog}
         newComment={newComment}
         setNewComment={setNewComment}
-        onCommentAdded={handleCommentAdded}
+        setComments={setComments}
+      />
+
+      {/* 댓글 수정 대화상자 */}
+      <EditComment
+        showEditCommentDialog={showEditCommentDialog}
+        setShowEditCommentDialog={setShowEditCommentDialog}
+        selectedComment={selectedComment}
+        setSelectedComment={setSelectedComment}
+        setComments={setComments}
       />
 
       {/* 사용자 모달 */}

@@ -1,12 +1,30 @@
+import { CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Dialog"
 import { Textarea } from "@/shared/ui/Textarea"
+import useUpdateComment from "../api/useUpdateComment"
 
-const EditComment = () => {
+//
+interface EditCommentProps {
+  showEditCommentDialog: boolean
+  setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>>
+  selectedComment: CommentItem
+  setSelectedComment: React.Dispatch<React.SetStateAction<CommentItem>>
+  setComments: React.Dispatch<React.SetStateAction<CommentItem[]>>
+}
+
+const EditComment = (props: EditCommentProps) => {
+  const { selectedComment, setSelectedComment, setShowEditCommentDialog, showEditCommentDialog, setComments } = props
+
+  const { updateComment } = useUpdateComment((updatedComment) => {
+    setComments((prev) => {
+      return prev.map((comment: CommentItem) => (comment.id === updatedComment.id ? updatedComment : comment))
+    })
+    setShowEditCommentDialog(false)
+  })
+
   return (
-    <Dialog
-    //  open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}
-    >
+    <Dialog open={showEditCommentDialog} onOpenChange={setShowEditCommentDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>댓글 수정</DialogTitle>
@@ -17,7 +35,9 @@ const EditComment = () => {
             value={selectedComment?.body || ""}
             onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
           />
-          <Button onClick={updateComment}>댓글 업데이트</Button>
+          <Button onClick={() => updateComment({ id: selectedComment.id, body: selectedComment.body })}>
+            댓글 업데이트
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

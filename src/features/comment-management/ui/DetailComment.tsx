@@ -3,21 +3,32 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Di
 import { CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
+import useLikeComment from "../api/useLikeComment"
+import useDeleteComment from "../api/useDeleteComment"
 
 interface DetailCommentProps {
-  showPostDetailDialog: boolean
-  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
-  selectedPost: any // TODO: 애니 해결하기
+  showPostDetailDialog: boolean //   게시물 상세 보기 오픈 여부
+  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>> // 게시물 상세 보기 오픈 set
+  selectedPost: any // 자세히 보기 선택한 포스트 - TODO: 애니 해결하기
   searchQuery: string // TODO: 드릴
-  comments: CommentItem[] // TODO: 이거 드릴링
-  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>> // TODO..
+  comments: CommentItem[] // 선택한 포스트의 댓글들 TODO: 이거 드릴링
+
+  // 추가
+  setShowAddCommentDialog: React.Dispatch<React.SetStateAction<boolean>> // 댓글 추가 오픈 set TODO..
   setNewComment: React.Dispatch<
     React.SetStateAction<{
       body: string
       postId: number
       userId: number
     }>
-  > // TODO..
+  > // TODO.. 새 댓글 상태?
+
+  // 좋아요
+  setComments: React.Dispatch<React.SetStateAction<CommentItem[]>> //;;
+
+  // 댓글 수정
+  setSelectedComment: React.Dispatch<React.SetStateAction<CommentItem>> // 선택한 댓글 -수정할 댓글
+  setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>> // 수정 모달 set
 }
 
 const DetailComment = (props: DetailCommentProps) => {
@@ -29,7 +40,29 @@ const DetailComment = (props: DetailCommentProps) => {
     comments,
     setShowAddCommentDialog,
     setNewComment,
+    setComments,
+    setSelectedComment,
+    setShowEditCommentDialog,
   } = props
+
+  // 댓글 좋아요
+  const { likeComment } = useLikeComment((updatedComment) => {
+    setComments((prev) => {
+      return prev.map((comment: CommentItem) => {
+        if (comment.id === updatedComment.id) {
+          return { ...comment, likes: comment.likes + 1 }
+        }
+        return comment
+      })
+    })
+  })
+
+  // 댓글 삭제
+  const { deleteComment } = useDeleteComment((deletedId) => {
+    setComments((prev) => {
+      return prev.filter((comment: CommentItem) => comment.id !== deletedId)
+    })
+  })
 
   return (
     <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
@@ -65,29 +98,24 @@ const DetailComment = (props: DetailCommentProps) => {
                     <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      // onClick={() => likeComment(comment.id, postId)}
-                    >
+                    {/* 좋아요 */}
+                    <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, comment.likes)}>
                       <ThumbsUp className="w-3 h-3" />
                       <span className="ml-1 text-xs">{comment.likes}</span>
                     </Button>
+                    {/* 수정 */}
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        // setSelectedComment(comment)
-                        // setShowEditCommentDialog(true)
+                        setSelectedComment(comment)
+                        setShowEditCommentDialog(true)
                       }}
                     >
                       <Edit2 className="w-3 h-3" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      // onClick={() => deleteComment(comment.id, postId)}
-                    >
+                    {/* 삭제 */}
+                    <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id)}>
                       <Trash2 className="w-3 h-3" />
                     </Button>
                   </div>

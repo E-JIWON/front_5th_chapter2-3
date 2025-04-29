@@ -1,4 +1,4 @@
-import { CommentAddResponse } from "@/entities/Comments/model/type"
+import { CommentAddResponse, CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Dialog"
 import { Textarea } from "@/shared/ui/Textarea"
@@ -19,18 +19,20 @@ interface AddCommentProps {
       userId: number
     }>
   >
-  onCommentAdded?: (comment: CommentAddResponse) => void
+  setComments: React.Dispatch<React.SetStateAction<CommentItem[]>>
 }
 
 const AddComment = (props: AddCommentProps) => {
-  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment, onCommentAdded } = props
+  const { showAddCommentDialog, setShowAddCommentDialog, newComment, setNewComment, setComments } = props
+
+  // 기존 댓글 목록에 새 댓글 추가
+  const handleCommentAdded = (addedComment: CommentAddResponse) => {
+    setComments((prev) => [...prev, addedComment as unknown as CommentItem])
+  }
 
   // 댓글 추가 성공 핸들러
-  const handleCommentAdded = (addedComment: CommentAddResponse) => {
-    // 상위 컴포넌트에 추가된 댓글 전달
-    if (onCommentAdded) {
-      onCommentAdded(addedComment)
-    }
+  const handleSuccess = (addedComment: CommentAddResponse) => {
+    handleCommentAdded(addedComment)
 
     // 입력 필드 및 다이얼로그 초기화
     setShowAddCommentDialog(false)
@@ -38,7 +40,7 @@ const AddComment = (props: AddCommentProps) => {
   }
 
   // 댓글 추가 Hook 사용
-  const { addComment } = useAddComment(handleCommentAdded)
+  const { addComment } = useAddComment(handleSuccess)
 
   // 댓글 추가 핸들러
   const handleAddComment = () => {
