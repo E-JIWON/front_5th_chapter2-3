@@ -5,9 +5,9 @@ import App from "./App.tsx"
 import TanstackQueryProvider from "./app/provider/TanstackQueryProvider.tsx"
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-  <TanstackQueryProvider>
-    <App />
-  </TanstackQueryProvider>,
-  // </StrictMode>,
+  <StrictMode>
+    <TanstackQueryProvider>
+      <App />
+    </TanstackQueryProvider>
+  </StrictMode>,
 )

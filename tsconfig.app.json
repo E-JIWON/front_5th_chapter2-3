@@ -21,13 +21,16 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
+    "strictNullChecks": false /* null/undefined 체크 완화 */,
+    "noImplicitAny": false /* 암시적 any 허용 */,
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
-      "@widgets/*": ["./src/app/widgets/*"],
+      "@widgets/*": ["./src/widgets/*"],
       "@entities/*": ["./src/entities/*"],
-      "@features/*": ["./src/app/features/*"],
+      "@features/*": ["./src/features/*"],
       "@app/*": ["./src/app/*"]
     }
   },
