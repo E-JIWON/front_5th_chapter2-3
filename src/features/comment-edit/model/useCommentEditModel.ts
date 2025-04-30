@@ -12,12 +12,11 @@ export const useCommentModel = ({ setComments }: UseCommentModelProps) => {
 
   // 댓글 수정 성공 핸들러
   const handleUpdateSuccess = (updatedComment: CommentItem) => {
-    // 댓글 목록 업데이트
     setComments((prev) => {
       return prev.map((comment) => (comment.id === updatedComment.id ? updatedComment : comment))
     })
 
-    // 대화상자 닫기 및 상태 초기화
+    // 초기화
     closeEditDialog()
     resetSelectedComment()
   }

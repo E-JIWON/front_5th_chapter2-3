@@ -81,7 +81,6 @@ const PostsManager = () => {
     fetchComments(post.id) // 댓글 패치
   }
 
-  // TODO: ...아무튼 해결해야할 문제
   const { fetchComments } = useGetComment((loadedComments: CommentItem[]) => setComments(loadedComments))
 
   // 게시물 추가 핸들러
@@ -349,7 +348,6 @@ const PostsManager = () => {
       {/* 
         게시물 상세 보기 대화상자 
         좋아요, 수정, 삭제 기능이 안에 있음..
-        TODO: 드릴링 해결 
       */}
       <DetailComment
         showPostDetailDialog={showPostDetailDialog}

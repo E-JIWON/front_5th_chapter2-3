@@ -10,21 +10,20 @@ import { useCommentAddStore } from "@/features/comment-add/model/useCommentAddSt
 import { useCommentEditStore } from "@/features/comment-edit/model/useCommentEditStore"
 
 interface DetailCommentProps {
-  showPostDetailDialog: boolean //   게시물 상세 보기 오픈 여부
-  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>> // 게시물 상세 보기 오픈 set
-  searchQuery: string // TODO: 드릴
-  comments: CommentItem[] // 선택한 포스트의 댓글들 TODO: 이거 드릴링
+  showPostDetailDialog: boolean
+  setShowPostDetailDialog: React.Dispatch<React.SetStateAction<boolean>>
+  searchQuery: string
+  comments: CommentItem[]
 
   // 좋아요
-  setComments: React.Dispatch<React.SetStateAction<CommentItem[]>> //;;
+  setComments: React.Dispatch<React.SetStateAction<CommentItem[]>>
 }
 
 const DetailComment = (props: DetailCommentProps) => {
   const { setShowPostDetailDialog, showPostDetailDialog, searchQuery, comments, setComments } = props
 
   const { openEditDialog } = useCommentEditStore()
-
-  const { selectedPost } = useSelectedPostStore() // 선택한 포스트
+  const { selectedPost } = useSelectedPostStore()
   const { openAddCommentDialog } = useCommentAddStore()
 
   // 댓글 추가 클릭

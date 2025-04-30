@@ -18,9 +18,6 @@ export const useCommentQuery = (callback?: (addedComment: CommentAddResponse) =>
           callback(data)
         }
       },
-      onError: (error) => {
-        console.error("댓글 추가 오류:", error)
-      },
     },
   )
 

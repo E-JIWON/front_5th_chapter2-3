@@ -11,7 +11,6 @@ export const useCommentAddModel = ({ setComments }: UseCommentAddProps) => {
 
   // 댓글 추가 성공 핸들러
   const handleSuccess = (addedComment: CommentAddResponse) => {
-    // 댓글 목록에 새 댓글 추가
     setComments((prev) => [...prev, addedComment as unknown as CommentItem])
 
     // 상태 초기화
