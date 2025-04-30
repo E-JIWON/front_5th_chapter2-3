@@ -1,16 +1,11 @@
 import { CommentAddResponse, CommentItem } from "@/entities/Comments/model/type"
-import { useAddComment } from "@/features/comment-add/model/useAddComment"
+import { useCommentQuery } from "@/features/comment-add/model/useCommentQuery"
 import { useCommentAddStore } from "./useCommentAddStore"
 
 interface UseCommentAddProps {
   setComments: React.Dispatch<React.SetStateAction<CommentItem[]>>
 }
 
-/**
- *
- * @param param0
- * @returns 댓글 추가 핸들러
- */
 export const useCommentAddModel = ({ setComments }: UseCommentAddProps) => {
   const { newComment, closeAddCommentDialog, resetNewComment } = useCommentAddStore()
 
@@ -24,7 +19,7 @@ export const useCommentAddModel = ({ setComments }: UseCommentAddProps) => {
     resetNewComment()
   }
 
-  const { addComment } = useAddComment(handleSuccess)
+  const { addComment } = useCommentQuery(handleSuccess)
 
   // 댓글 추가 핸들러
   const handleAddComment = () => {

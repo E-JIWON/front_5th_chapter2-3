@@ -3,8 +3,8 @@ import { CommentItem } from "@/entities/Comments/model/type"
 import { Button } from "@/shared/ui/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/Dialog"
 import { Textarea } from "@/shared/ui/Textarea"
-import { useCommentAddModel } from "../useCommentAddModel"
-import { useCommentAddStore } from "../useCommentAddStore"
+import { useCommentAddModel } from "../model/useCommentAddModel"
+import { useCommentAddStore } from "../model/useCommentAddStore"
 
 interface AddCommentProps {
   setComments: React.Dispatch<React.SetStateAction<CommentItem[]>>

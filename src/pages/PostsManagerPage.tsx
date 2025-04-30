@@ -20,8 +20,7 @@ import { Textarea } from "@/shared/ui/Textarea"
 import { Button } from "@/shared/ui/Button"
 import { CommentItem } from "@/entities/Comments/model/type"
 import DetailComment from "@/features/comment-management/ui/DetailComment"
-import AddComment from "@/features/comment-add/model/ui/AddComment"
-import EditComment from "@/features/comment-management/ui/EditComment"
+import EditComment from "@/features/comment-edit/ui/EditComment"
 import usePostsModel from "@/features/posts/model/usePostsModel"
 import { useGetComment } from "@/features/comment-management/model/useGetComment"
 import useTagsModel from "@/features/tag/model/useTagsModel"
@@ -32,6 +31,7 @@ import TableHead from "@/shared/ui/Table/TableHead"
 import TableBody from "@/shared/ui/Table/TableBody"
 import TableCell from "@/shared/ui/Table/TableCell"
 import { useSelectedPostStore } from "@/features/posts/model/useSelectedPostStore"
+import AddComment from "@/features/comment-add/ui/AddComment"
 
 const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
@@ -44,10 +44,6 @@ const PostsManager = () => {
   // 댓글 상태 관리
   const [comments, setComments] = useState<CommentItem[]>([])
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-
-  // 댓글 수정 관련
-  const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
-  const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null)
 
   const { selectedPost, setSelectedPost } = useSelectedPostStore() // 선택한 포스트
 
@@ -367,21 +363,13 @@ const PostsManager = () => {
         searchQuery={searchQuery}
         comments={comments}
         setComments={setComments}
-        setSelectedComment={setSelectedComment}
-        setShowEditCommentDialog={setShowEditCommentDialog}
       />
 
       {/* 댓글 추가 */}
       <AddComment setComments={setComments} />
 
       {/* 댓글 수정 대화상자 */}
-      <EditComment
-        showEditCommentDialog={showEditCommentDialog}
-        setShowEditCommentDialog={setShowEditCommentDialog}
-        selectedComment={selectedComment}
-        setSelectedComment={setSelectedComment}
-        setComments={setComments}
-      />
+      <EditComment setComments={setComments} />
 
       {/* 사용자 모달 */}
       <UserCard />

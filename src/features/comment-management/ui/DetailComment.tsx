@@ -7,6 +7,7 @@ import useLikeComment from "../model/useLikeComment"
 import useDeleteComment from "../model/useDeleteComment"
 import { useSelectedPostStore } from "@/features/posts/model/useSelectedPostStore"
 import { useCommentAddStore } from "@/features/comment-add/model/useCommentAddStore"
+import { useCommentEditStore } from "@/features/comment-edit/model/useCommentEditStore"
 
 interface DetailCommentProps {
   showPostDetailDialog: boolean //   게시물 상세 보기 오픈 여부
@@ -16,22 +17,12 @@ interface DetailCommentProps {
 
   // 좋아요
   setComments: React.Dispatch<React.SetStateAction<CommentItem[]>> //;;
-
-  // 댓글 수정
-  setSelectedComment: React.Dispatch<React.SetStateAction<CommentItem>> // 선택한 댓글 -수정할 댓글
-  setShowEditCommentDialog: React.Dispatch<React.SetStateAction<boolean>> // 수정 모달 set
 }
 
 const DetailComment = (props: DetailCommentProps) => {
-  const {
-    setShowPostDetailDialog,
-    showPostDetailDialog,
-    searchQuery,
-    comments,
-    setComments,
-    setSelectedComment,
-    setShowEditCommentDialog,
-  } = props
+  const { setShowPostDetailDialog, showPostDetailDialog, searchQuery, comments, setComments } = props
+
+  const { openEditDialog } = useCommentEditStore()
 
   const { selectedPost } = useSelectedPostStore() // 선택한 포스트
   const { openAddCommentDialog } = useCommentAddStore()
@@ -98,8 +89,7 @@ const DetailComment = (props: DetailCommentProps) => {
                       variant="ghost"
                       size="sm"
                       onClick={() => {
-                        setSelectedComment(comment)
-                        setShowEditCommentDialog(true)
+                        openEditDialog(comment)
                       }}
                     >
                       <Edit2 className="w-3 h-3" />

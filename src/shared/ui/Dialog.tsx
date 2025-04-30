@@ -12,7 +12,7 @@ export const DialogOverlay = DialogPrimitive.Overlay
 interface DialogContentProps extends DialogPrimitive.DialogContentProps {
   className?: string
 }
-const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(({ className, children, ...props }, ref) => (
+const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(({ className = "", children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
     <DialogPrimitive.Content
@@ -33,7 +33,7 @@ DialogContent.displayName = DialogPrimitive.Content.displayName
 interface DialogHeaderProps extends HTMLAttributes<HTMLDivElement> {
   className?: string
 }
-const DialogHeader = ({ className, ...props }: DialogHeaderProps) => (
+const DialogHeader = ({ className = "", ...props }: DialogHeaderProps) => (
   <div className={`flex flex-col space-y-1.5 text-center sm:text-left ${className}`} {...props} />
 )
 DialogHeader.displayName = "DialogHeader"
@@ -41,7 +41,7 @@ DialogHeader.displayName = "DialogHeader"
 interface DialogTitleProps extends DialogPrimitive.DialogTitleProps {
   className?: string
 }
-const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(({ className, ...props }, ref) => (
+const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(({ className = "", ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
     className={`text-lg font-semibold leading-none tracking-tight ${className}`}

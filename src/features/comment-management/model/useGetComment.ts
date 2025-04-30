@@ -18,9 +18,6 @@ export const useGetComment = (callback?: (loadedComments: CommentItem[]) => void
           callback(data.comments)
         }
       },
-      onError: (error) => {
-        console.error("댓글 가져오기 오류:", error)
-      },
     },
   )
 

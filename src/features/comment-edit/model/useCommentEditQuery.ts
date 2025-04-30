@@ -6,7 +6,7 @@ import { useCustomMutation } from "@/shared/api/useCustomMutation"
  * @param callback 댓글 수정 후 실행할 콜백 함수
  * @returns 댓글 수정 함수 및 상태 정보
  */
-export const useUpdateComment = (callback?: (updatedComment: CommentItem) => void) => {
+export const useCommentEditQuery = (callback?: (updatedComment: CommentItem) => void) => {
   const updateCommentMutation = useCustomMutation(
     async (comment: { id: number; body: string }) => {
       const response = await fetch(`/api/comments/${comment.id}`, {
@@ -40,4 +40,4 @@ export const useUpdateComment = (callback?: (updatedComment: CommentItem) => voi
   }
 }
 
-export default useUpdateComment
+export default useCommentEditQuery

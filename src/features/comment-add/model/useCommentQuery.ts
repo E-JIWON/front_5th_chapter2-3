@@ -7,7 +7,7 @@ import { useCustomMutation } from "@/shared/api/useCustomMutation"
  * @param callback 댓글 추가 후 실행할 콜백 함수
  * @returns 댓글 추가 함수 및 상태 정보
  */
-export const useAddComment = (callback?: (addedComment: CommentAddResponse) => void) => {
+export const useCommentQuery = (callback?: (addedComment: CommentAddResponse) => void) => {
   const addCommentMutation = useCustomMutation(
     async (commentData: CommentCreateRequest) => {
       return await addCommentApi(commentData)
