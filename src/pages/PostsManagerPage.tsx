@@ -1,16 +1,5 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../shared/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/Dialog"
 import UserCard from "@/features/view-user-modal/ui/UserCard"
 import { useUserModalStore } from "@/features/view-user-modal/model/useModalStore"
@@ -32,6 +21,11 @@ import TableBody from "@/shared/ui/Table/TableBody"
 import TableCell from "@/shared/ui/Table/TableCell"
 import { useSelectedPostStore } from "@/features/posts/model/useSelectedPostStore"
 import AddComment from "@/features/comment-add/ui/AddComment"
+import Card from "@/shared/ui/Card/Card"
+import CardHeader from "@/shared/ui/Card/CardHeader"
+import CardTitle from "@/shared/ui/Card/CardTitle"
+import CardContent from "@/shared/ui/Card/CardContent"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select"
 
 const PostsManager = () => {
   const [showAddDialog, setShowAddDialog] = useState(false)
